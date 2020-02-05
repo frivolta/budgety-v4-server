@@ -8,7 +8,7 @@ export const auth = {
     const user = await ctx.prisma.createUser({ ...args, password });
 
     return {
-      token: jwt.sign({ userId: user.id }, 'jwtsecret123'),
+      token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),
       user
     };
   },
@@ -25,7 +25,7 @@ export const auth = {
     }
 
     return {
-      token: jwt.sign({ userId: user.id }, 'jwtsecret123'),
+      token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),
       user
     };
   }
