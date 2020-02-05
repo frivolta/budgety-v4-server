@@ -1,7 +1,7 @@
 {
   "name": "budgety-v4-server",
   "scripts": {
-    "start": "dotenv -- nodemon -e js,graphql -x node dist/index.js",
+    "start": "nodemon -e js,graphql -x node dist/index.js",
     "dev": "dotenv -- nodemon -e ts,graphql -x ts-node src/index.ts",
     "debug": "dotenv -- nodemon -e ts,graphql -x ts-node --inspect src/index.ts",
     "build": "rimraf dist && tsc"
