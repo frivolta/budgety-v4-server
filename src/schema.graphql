@@ -8,6 +8,7 @@ type Query {
 type Mutation {
   signup(email: String!, password: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
+  createExpense(type: String!, description: String!, date: String!, amount: Float!): Expense!
   createDraft(title: String!, content: String!): Post!
   publish(id: ID!): Post!
   deletePost(id: ID!): Post!
@@ -27,6 +28,7 @@ type User {
   email: String!
   name: String!
   posts: [Post!]!
+  expenses: [Expense!]!
 }
 
 type Post {
@@ -35,4 +37,13 @@ type Post {
   title: String!
   content: String!
   author: User!
+}
+
+type Expense {
+  id: ID!
+  type: String!
+  description: String!
+  date: String!
+  amount: Float!
+  createdBy: User!
 }

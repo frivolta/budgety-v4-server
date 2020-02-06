@@ -24,7 +24,7 @@ type Expense {
   id: ID!
   type: String!
   description: String!
-  date: DateTime!
+  date: String!
   amount: Float!
   createdBy: User!
 }
@@ -39,9 +39,22 @@ input ExpenseCreateInput {
   id: ID
   type: String!
   description: String!
-  date: DateTime!
+  date: String!
   amount: Float!
-  createdBy: UserCreateOneInput!
+  createdBy: UserCreateOneWithoutExpensesInput!
+}
+
+input ExpenseCreateManyWithoutCreatedByInput {
+  create: [ExpenseCreateWithoutCreatedByInput!]
+  connect: [ExpenseWhereUniqueInput!]
+}
+
+input ExpenseCreateWithoutCreatedByInput {
+  id: ID
+  type: String!
+  description: String!
+  date: String!
+  amount: Float!
 }
 
 type ExpenseEdge {
@@ -66,8 +79,78 @@ type ExpensePreviousValues {
   id: ID!
   type: String!
   description: String!
-  date: DateTime!
+  date: String!
   amount: Float!
+}
+
+input ExpenseScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  type: String
+  type_not: String
+  type_in: [String!]
+  type_not_in: [String!]
+  type_lt: String
+  type_lte: String
+  type_gt: String
+  type_gte: String
+  type_contains: String
+  type_not_contains: String
+  type_starts_with: String
+  type_not_starts_with: String
+  type_ends_with: String
+  type_not_ends_with: String
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  date: String
+  date_not: String
+  date_in: [String!]
+  date_not_in: [String!]
+  date_lt: String
+  date_lte: String
+  date_gt: String
+  date_gte: String
+  date_contains: String
+  date_not_contains: String
+  date_starts_with: String
+  date_not_starts_with: String
+  date_ends_with: String
+  date_not_ends_with: String
+  amount: Float
+  amount_not: Float
+  amount_in: [Float!]
+  amount_not_in: [Float!]
+  amount_lt: Float
+  amount_lte: Float
+  amount_gt: Float
+  amount_gte: Float
+  AND: [ExpenseScalarWhereInput!]
+  OR: [ExpenseScalarWhereInput!]
+  NOT: [ExpenseScalarWhereInput!]
 }
 
 type ExpenseSubscriptionPayload {
@@ -91,16 +174,58 @@ input ExpenseSubscriptionWhereInput {
 input ExpenseUpdateInput {
   type: String
   description: String
-  date: DateTime
+  date: String
   amount: Float
-  createdBy: UserUpdateOneRequiredInput
+  createdBy: UserUpdateOneRequiredWithoutExpensesInput
+}
+
+input ExpenseUpdateManyDataInput {
+  type: String
+  description: String
+  date: String
+  amount: Float
 }
 
 input ExpenseUpdateManyMutationInput {
   type: String
   description: String
-  date: DateTime
+  date: String
   amount: Float
+}
+
+input ExpenseUpdateManyWithoutCreatedByInput {
+  create: [ExpenseCreateWithoutCreatedByInput!]
+  delete: [ExpenseWhereUniqueInput!]
+  connect: [ExpenseWhereUniqueInput!]
+  set: [ExpenseWhereUniqueInput!]
+  disconnect: [ExpenseWhereUniqueInput!]
+  update: [ExpenseUpdateWithWhereUniqueWithoutCreatedByInput!]
+  upsert: [ExpenseUpsertWithWhereUniqueWithoutCreatedByInput!]
+  deleteMany: [ExpenseScalarWhereInput!]
+  updateMany: [ExpenseUpdateManyWithWhereNestedInput!]
+}
+
+input ExpenseUpdateManyWithWhereNestedInput {
+  where: ExpenseScalarWhereInput!
+  data: ExpenseUpdateManyDataInput!
+}
+
+input ExpenseUpdateWithoutCreatedByDataInput {
+  type: String
+  description: String
+  date: String
+  amount: Float
+}
+
+input ExpenseUpdateWithWhereUniqueWithoutCreatedByInput {
+  where: ExpenseWhereUniqueInput!
+  data: ExpenseUpdateWithoutCreatedByDataInput!
+}
+
+input ExpenseUpsertWithWhereUniqueWithoutCreatedByInput {
+  where: ExpenseWhereUniqueInput!
+  update: ExpenseUpdateWithoutCreatedByDataInput!
+  create: ExpenseCreateWithoutCreatedByInput!
 }
 
 input ExpenseWhereInput {
@@ -146,14 +271,20 @@ input ExpenseWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
-  date: DateTime
-  date_not: DateTime
-  date_in: [DateTime!]
-  date_not_in: [DateTime!]
-  date_lt: DateTime
-  date_lte: DateTime
-  date_gt: DateTime
-  date_gte: DateTime
+  date: String
+  date_not: String
+  date_in: [String!]
+  date_not_in: [String!]
+  date_lt: String
+  date_lte: String
+  date_gt: String
+  date_gte: String
+  date_contains: String
+  date_not_contains: String
+  date_starts_with: String
+  date_not_starts_with: String
+  date_ends_with: String
+  date_not_ends_with: String
   amount: Float
   amount_not: Float
   amount_in: [Float!]
@@ -509,6 +640,7 @@ type User {
   email: String!
   password: String!
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
+  expenses(where: ExpenseWhereInput, orderBy: ExpenseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Expense!]
 }
 
 type UserConnection {
@@ -522,10 +654,11 @@ input UserCreateInput {
   email: String!
   password: String!
   posts: PostCreateManyWithoutAuthorInput
+  expenses: ExpenseCreateManyWithoutCreatedByInput
 }
 
-input UserCreateOneInput {
-  create: UserCreateInput
+input UserCreateOneWithoutExpensesInput {
+  create: UserCreateWithoutExpensesInput
   connect: UserWhereUniqueInput
 }
 
@@ -534,10 +667,18 @@ input UserCreateOneWithoutPostsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateWithoutExpensesInput {
+  id: ID
+  email: String!
+  password: String!
+  posts: PostCreateManyWithoutAuthorInput
+}
+
 input UserCreateWithoutPostsInput {
   id: ID
   email: String!
   password: String!
+  expenses: ExpenseCreateManyWithoutCreatedByInput
 }
 
 type UserEdge {
@@ -578,16 +719,11 @@ input UserSubscriptionWhereInput {
   NOT: [UserSubscriptionWhereInput!]
 }
 
-input UserUpdateDataInput {
-  email: String
-  password: String
-  posts: PostUpdateManyWithoutAuthorInput
-}
-
 input UserUpdateInput {
   email: String
   password: String
   posts: PostUpdateManyWithoutAuthorInput
+  expenses: ExpenseUpdateManyWithoutCreatedByInput
 }
 
 input UserUpdateManyMutationInput {
@@ -595,10 +731,10 @@ input UserUpdateManyMutationInput {
   password: String
 }
 
-input UserUpdateOneRequiredInput {
-  create: UserCreateInput
-  update: UserUpdateDataInput
-  upsert: UserUpsertNestedInput
+input UserUpdateOneRequiredWithoutExpensesInput {
+  create: UserCreateWithoutExpensesInput
+  update: UserUpdateWithoutExpensesDataInput
+  upsert: UserUpsertWithoutExpensesInput
   connect: UserWhereUniqueInput
 }
 
@@ -609,14 +745,21 @@ input UserUpdateOneRequiredWithoutPostsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateWithoutExpensesDataInput {
+  email: String
+  password: String
+  posts: PostUpdateManyWithoutAuthorInput
+}
+
 input UserUpdateWithoutPostsDataInput {
   email: String
   password: String
+  expenses: ExpenseUpdateManyWithoutCreatedByInput
 }
 
-input UserUpsertNestedInput {
-  update: UserUpdateDataInput!
-  create: UserCreateInput!
+input UserUpsertWithoutExpensesInput {
+  update: UserUpdateWithoutExpensesDataInput!
+  create: UserCreateWithoutExpensesInput!
 }
 
 input UserUpsertWithoutPostsInput {
@@ -670,6 +813,9 @@ input UserWhereInput {
   posts_every: PostWhereInput
   posts_some: PostWhereInput
   posts_none: PostWhereInput
+  expenses_every: ExpenseWhereInput
+  expenses_some: ExpenseWhereInput
+  expenses_none: ExpenseWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
