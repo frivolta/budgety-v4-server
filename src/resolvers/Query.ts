@@ -29,6 +29,11 @@ export const Query = {
 
   profile(parent, args, ctx: Context) {
     const id = getUserId(ctx);
-    return ctx.prisma.profile({ id });
+    const where = {
+      createdBy: {
+        id: id.toString(),
+      },
+    };
+    return ctx.prisma.profiles({ where });
   },
 };
