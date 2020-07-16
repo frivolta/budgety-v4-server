@@ -65,4 +65,5 @@ type Profile {
   accountName: String!
   accountBalance: String!
   monthlyBudget: String!
+  createdBy: User!
 }
