@@ -10,6 +10,10 @@ type AggregatePost {
   count: Int!
 }
 
+type AggregateProfile {
+  count: Int!
+}
+
 type AggregateUser {
   count: Int!
 }
@@ -318,6 +322,12 @@ type Mutation {
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
   deletePost(where: PostWhereUniqueInput!): Post
   deleteManyPosts(where: PostWhereInput): BatchPayload!
+  createProfile(data: ProfileCreateInput!): Profile!
+  updateProfile(data: ProfileUpdateInput!, where: ProfileWhereUniqueInput!): Profile
+  updateManyProfiles(data: ProfileUpdateManyMutationInput!, where: ProfileWhereInput): BatchPayload!
+  upsertProfile(where: ProfileWhereUniqueInput!, create: ProfileCreateInput!, update: ProfileUpdateInput!): Profile!
+  deleteProfile(where: ProfileWhereUniqueInput!): Profile
+  deleteManyProfiles(where: ProfileWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -616,6 +626,182 @@ input PostWhereUniqueInput {
   id: ID
 }
 
+type Profile {
+  id: ID!
+  isCompleted: Boolean!
+  accountName: String!
+  accountBalance: String!
+  monthlyBudget: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  createdBy: User!
+}
+
+type ProfileConnection {
+  pageInfo: PageInfo!
+  edges: [ProfileEdge]!
+  aggregate: AggregateProfile!
+}
+
+input ProfileCreateInput {
+  id: ID
+  isCompleted: Boolean
+  accountName: String!
+  accountBalance: String!
+  monthlyBudget: String!
+  createdBy: UserCreateOneInput!
+}
+
+type ProfileEdge {
+  node: Profile!
+  cursor: String!
+}
+
+enum ProfileOrderByInput {
+  id_ASC
+  id_DESC
+  isCompleted_ASC
+  isCompleted_DESC
+  accountName_ASC
+  accountName_DESC
+  accountBalance_ASC
+  accountBalance_DESC
+  monthlyBudget_ASC
+  monthlyBudget_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ProfilePreviousValues {
+  id: ID!
+  isCompleted: Boolean!
+  accountName: String!
+  accountBalance: String!
+  monthlyBudget: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ProfileSubscriptionPayload {
+  mutation: MutationType!
+  node: Profile
+  updatedFields: [String!]
+  previousValues: ProfilePreviousValues
+}
+
+input ProfileSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ProfileWhereInput
+  AND: [ProfileSubscriptionWhereInput!]
+  OR: [ProfileSubscriptionWhereInput!]
+  NOT: [ProfileSubscriptionWhereInput!]
+}
+
+input ProfileUpdateInput {
+  isCompleted: Boolean
+  accountName: String
+  accountBalance: String
+  monthlyBudget: String
+  createdBy: UserUpdateOneRequiredInput
+}
+
+input ProfileUpdateManyMutationInput {
+  isCompleted: Boolean
+  accountName: String
+  accountBalance: String
+  monthlyBudget: String
+}
+
+input ProfileWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  isCompleted: Boolean
+  isCompleted_not: Boolean
+  accountName: String
+  accountName_not: String
+  accountName_in: [String!]
+  accountName_not_in: [String!]
+  accountName_lt: String
+  accountName_lte: String
+  accountName_gt: String
+  accountName_gte: String
+  accountName_contains: String
+  accountName_not_contains: String
+  accountName_starts_with: String
+  accountName_not_starts_with: String
+  accountName_ends_with: String
+  accountName_not_ends_with: String
+  accountBalance: String
+  accountBalance_not: String
+  accountBalance_in: [String!]
+  accountBalance_not_in: [String!]
+  accountBalance_lt: String
+  accountBalance_lte: String
+  accountBalance_gt: String
+  accountBalance_gte: String
+  accountBalance_contains: String
+  accountBalance_not_contains: String
+  accountBalance_starts_with: String
+  accountBalance_not_starts_with: String
+  accountBalance_ends_with: String
+  accountBalance_not_ends_with: String
+  monthlyBudget: String
+  monthlyBudget_not: String
+  monthlyBudget_in: [String!]
+  monthlyBudget_not_in: [String!]
+  monthlyBudget_lt: String
+  monthlyBudget_lte: String
+  monthlyBudget_gt: String
+  monthlyBudget_gte: String
+  monthlyBudget_contains: String
+  monthlyBudget_not_contains: String
+  monthlyBudget_starts_with: String
+  monthlyBudget_not_starts_with: String
+  monthlyBudget_ends_with: String
+  monthlyBudget_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  createdBy: UserWhereInput
+  AND: [ProfileWhereInput!]
+  OR: [ProfileWhereInput!]
+  NOT: [ProfileWhereInput!]
+}
+
+input ProfileWhereUniqueInput {
+  id: ID
+}
+
 type Query {
   expense(where: ExpenseWhereUniqueInput!): Expense
   expenses(where: ExpenseWhereInput, orderBy: ExpenseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Expense]!
@@ -623,6 +809,9 @@ type Query {
   post(where: PostWhereUniqueInput!): Post
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
+  profile(where: ProfileWhereUniqueInput!): Profile
+  profiles(where: ProfileWhereInput, orderBy: ProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Profile]!
+  profilesConnection(where: ProfileWhereInput, orderBy: ProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProfileConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -632,6 +821,7 @@ type Query {
 type Subscription {
   expense(where: ExpenseSubscriptionWhereInput): ExpenseSubscriptionPayload
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
+  profile(where: ProfileSubscriptionWhereInput): ProfileSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
@@ -655,6 +845,11 @@ input UserCreateInput {
   password: String!
   posts: PostCreateManyWithoutAuthorInput
   expenses: ExpenseCreateManyWithoutCreatedByInput
+}
+
+input UserCreateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutExpensesInput {
@@ -719,6 +914,13 @@ input UserSubscriptionWhereInput {
   NOT: [UserSubscriptionWhereInput!]
 }
 
+input UserUpdateDataInput {
+  email: String
+  password: String
+  posts: PostUpdateManyWithoutAuthorInput
+  expenses: ExpenseUpdateManyWithoutCreatedByInput
+}
+
 input UserUpdateInput {
   email: String
   password: String
@@ -729,6 +931,13 @@ input UserUpdateInput {
 input UserUpdateManyMutationInput {
   email: String
   password: String
+}
+
+input UserUpdateOneRequiredInput {
+  create: UserCreateInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+  connect: UserWhereUniqueInput
 }
 
 input UserUpdateOneRequiredWithoutExpensesInput {
@@ -755,6 +964,11 @@ input UserUpdateWithoutPostsDataInput {
   email: String
   password: String
   expenses: ExpenseUpdateManyWithoutCreatedByInput
+}
+
+input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
 }
 
 input UserUpsertWithoutExpensesInput {

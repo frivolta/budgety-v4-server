@@ -24,3 +24,14 @@ type Expense {
   amount: Float!
   createdBy: User!
 }
+
+type Profile {
+  id: ID! @id
+  isCompleted: Boolean! @default(value: false)
+  accountName: String!
+  accountBalance: String!
+  monthlyBudget: String!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  createdBy: User!
+}

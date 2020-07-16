@@ -18,6 +18,7 @@ export type Maybe<T> = T | undefined | null;
 export interface Exists {
   expense: (where?: ExpenseWhereInput) => Promise<boolean>;
   post: (where?: PostWhereInput) => Promise<boolean>;
+  profile: (where?: ProfileWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
@@ -78,6 +79,25 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => PostConnectionPromise;
+  profile: (where: ProfileWhereUniqueInput) => ProfileNullablePromise;
+  profiles: (args?: {
+    where?: ProfileWhereInput;
+    orderBy?: ProfileOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Profile>;
+  profilesConnection: (args?: {
+    where?: ProfileWhereInput;
+    orderBy?: ProfileOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => ProfileConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserNullablePromise;
   users: (args?: {
     where?: UserWhereInput;
@@ -135,6 +155,22 @@ export interface Prisma {
   }) => PostPromise;
   deletePost: (where: PostWhereUniqueInput) => PostPromise;
   deleteManyPosts: (where?: PostWhereInput) => BatchPayloadPromise;
+  createProfile: (data: ProfileCreateInput) => ProfilePromise;
+  updateProfile: (args: {
+    data: ProfileUpdateInput;
+    where: ProfileWhereUniqueInput;
+  }) => ProfilePromise;
+  updateManyProfiles: (args: {
+    data: ProfileUpdateManyMutationInput;
+    where?: ProfileWhereInput;
+  }) => BatchPayloadPromise;
+  upsertProfile: (args: {
+    where: ProfileWhereUniqueInput;
+    create: ProfileCreateInput;
+    update: ProfileUpdateInput;
+  }) => ProfilePromise;
+  deleteProfile: (where: ProfileWhereUniqueInput) => ProfilePromise;
+  deleteManyProfiles: (where?: ProfileWhereInput) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
   updateUser: (args: {
     data: UserUpdateInput;
@@ -166,6 +202,9 @@ export interface Subscription {
   post: (
     where?: PostSubscriptionWhereInput
   ) => PostSubscriptionPayloadSubscription;
+  profile: (
+    where?: ProfileSubscriptionWhereInput
+  ) => ProfileSubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
@@ -204,6 +243,22 @@ export type ExpenseOrderByInput =
   | "date_DESC"
   | "amount_ASC"
   | "amount_DESC";
+
+export type ProfileOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "isCompleted_ASC"
+  | "isCompleted_DESC"
+  | "accountName_ASC"
+  | "accountName_DESC"
+  | "accountBalance_ASC"
+  | "accountBalance_DESC"
+  | "monthlyBudget_ASC"
+  | "monthlyBudget_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
 
 export type UserOrderByInput =
   | "id_ASC"
@@ -414,6 +469,91 @@ export interface ExpenseWhereInput {
 export type PostWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
+
+export type ProfileWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export interface ProfileWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  isCompleted?: Maybe<Boolean>;
+  isCompleted_not?: Maybe<Boolean>;
+  accountName?: Maybe<String>;
+  accountName_not?: Maybe<String>;
+  accountName_in?: Maybe<String[] | String>;
+  accountName_not_in?: Maybe<String[] | String>;
+  accountName_lt?: Maybe<String>;
+  accountName_lte?: Maybe<String>;
+  accountName_gt?: Maybe<String>;
+  accountName_gte?: Maybe<String>;
+  accountName_contains?: Maybe<String>;
+  accountName_not_contains?: Maybe<String>;
+  accountName_starts_with?: Maybe<String>;
+  accountName_not_starts_with?: Maybe<String>;
+  accountName_ends_with?: Maybe<String>;
+  accountName_not_ends_with?: Maybe<String>;
+  accountBalance?: Maybe<String>;
+  accountBalance_not?: Maybe<String>;
+  accountBalance_in?: Maybe<String[] | String>;
+  accountBalance_not_in?: Maybe<String[] | String>;
+  accountBalance_lt?: Maybe<String>;
+  accountBalance_lte?: Maybe<String>;
+  accountBalance_gt?: Maybe<String>;
+  accountBalance_gte?: Maybe<String>;
+  accountBalance_contains?: Maybe<String>;
+  accountBalance_not_contains?: Maybe<String>;
+  accountBalance_starts_with?: Maybe<String>;
+  accountBalance_not_starts_with?: Maybe<String>;
+  accountBalance_ends_with?: Maybe<String>;
+  accountBalance_not_ends_with?: Maybe<String>;
+  monthlyBudget?: Maybe<String>;
+  monthlyBudget_not?: Maybe<String>;
+  monthlyBudget_in?: Maybe<String[] | String>;
+  monthlyBudget_not_in?: Maybe<String[] | String>;
+  monthlyBudget_lt?: Maybe<String>;
+  monthlyBudget_lte?: Maybe<String>;
+  monthlyBudget_gt?: Maybe<String>;
+  monthlyBudget_gte?: Maybe<String>;
+  monthlyBudget_contains?: Maybe<String>;
+  monthlyBudget_not_contains?: Maybe<String>;
+  monthlyBudget_starts_with?: Maybe<String>;
+  monthlyBudget_not_starts_with?: Maybe<String>;
+  monthlyBudget_ends_with?: Maybe<String>;
+  monthlyBudget_not_ends_with?: Maybe<String>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  createdBy?: Maybe<UserWhereInput>;
+  AND?: Maybe<ProfileWhereInput[] | ProfileWhereInput>;
+  OR?: Maybe<ProfileWhereInput[] | ProfileWhereInput>;
+  NOT?: Maybe<ProfileWhereInput[] | ProfileWhereInput>;
+}
 
 export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
@@ -789,12 +929,60 @@ export interface PostUpdateManyMutationInput {
   content?: Maybe<String>;
 }
 
+export interface ProfileCreateInput {
+  id?: Maybe<ID_Input>;
+  isCompleted?: Maybe<Boolean>;
+  accountName: String;
+  accountBalance: String;
+  monthlyBudget: String;
+  createdBy: UserCreateOneInput;
+}
+
+export interface UserCreateOneInput {
+  create?: Maybe<UserCreateInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
 export interface UserCreateInput {
   id?: Maybe<ID_Input>;
   email: String;
   password: String;
   posts?: Maybe<PostCreateManyWithoutAuthorInput>;
   expenses?: Maybe<ExpenseCreateManyWithoutCreatedByInput>;
+}
+
+export interface ProfileUpdateInput {
+  isCompleted?: Maybe<Boolean>;
+  accountName?: Maybe<String>;
+  accountBalance?: Maybe<String>;
+  monthlyBudget?: Maybe<String>;
+  createdBy?: Maybe<UserUpdateOneRequiredInput>;
+}
+
+export interface UserUpdateOneRequiredInput {
+  create?: Maybe<UserCreateInput>;
+  update?: Maybe<UserUpdateDataInput>;
+  upsert?: Maybe<UserUpsertNestedInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserUpdateDataInput {
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  posts?: Maybe<PostUpdateManyWithoutAuthorInput>;
+  expenses?: Maybe<ExpenseUpdateManyWithoutCreatedByInput>;
+}
+
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
+}
+
+export interface ProfileUpdateManyMutationInput {
+  isCompleted?: Maybe<Boolean>;
+  accountName?: Maybe<String>;
+  accountBalance?: Maybe<String>;
+  monthlyBudget?: Maybe<String>;
 }
 
 export interface UserUpdateInput {
@@ -829,6 +1017,17 @@ export interface PostSubscriptionWhereInput {
   AND?: Maybe<PostSubscriptionWhereInput[] | PostSubscriptionWhereInput>;
   OR?: Maybe<PostSubscriptionWhereInput[] | PostSubscriptionWhereInput>;
   NOT?: Maybe<PostSubscriptionWhereInput[] | PostSubscriptionWhereInput>;
+}
+
+export interface ProfileSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<ProfileWhereInput>;
+  AND?: Maybe<ProfileSubscriptionWhereInput[] | ProfileSubscriptionWhereInput>;
+  OR?: Maybe<ProfileSubscriptionWhereInput[] | ProfileSubscriptionWhereInput>;
+  NOT?: Maybe<ProfileSubscriptionWhereInput[] | ProfileSubscriptionWhereInput>;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -1141,6 +1340,107 @@ export interface AggregatePostSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
+export interface Profile {
+  id: ID_Output;
+  isCompleted: Boolean;
+  accountName: String;
+  accountBalance: String;
+  monthlyBudget: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface ProfilePromise extends Promise<Profile>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  isCompleted: () => Promise<Boolean>;
+  accountName: () => Promise<String>;
+  accountBalance: () => Promise<String>;
+  monthlyBudget: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdBy: <T = UserPromise>() => T;
+}
+
+export interface ProfileSubscription
+  extends Promise<AsyncIterator<Profile>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  isCompleted: () => Promise<AsyncIterator<Boolean>>;
+  accountName: () => Promise<AsyncIterator<String>>;
+  accountBalance: () => Promise<AsyncIterator<String>>;
+  monthlyBudget: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdBy: <T = UserSubscription>() => T;
+}
+
+export interface ProfileNullablePromise
+  extends Promise<Profile | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  isCompleted: () => Promise<Boolean>;
+  accountName: () => Promise<String>;
+  accountBalance: () => Promise<String>;
+  monthlyBudget: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdBy: <T = UserPromise>() => T;
+}
+
+export interface ProfileConnection {
+  pageInfo: PageInfo;
+  edges: ProfileEdge[];
+}
+
+export interface ProfileConnectionPromise
+  extends Promise<ProfileConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<ProfileEdge>>() => T;
+  aggregate: <T = AggregateProfilePromise>() => T;
+}
+
+export interface ProfileConnectionSubscription
+  extends Promise<AsyncIterator<ProfileConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ProfileEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateProfileSubscription>() => T;
+}
+
+export interface ProfileEdge {
+  node: Profile;
+  cursor: String;
+}
+
+export interface ProfileEdgePromise extends Promise<ProfileEdge>, Fragmentable {
+  node: <T = ProfilePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface ProfileEdgeSubscription
+  extends Promise<AsyncIterator<ProfileEdge>>,
+    Fragmentable {
+  node: <T = ProfileSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateProfile {
+  count: Int;
+}
+
+export interface AggregateProfilePromise
+  extends Promise<AggregateProfile>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateProfileSubscription
+  extends Promise<AsyncIterator<AggregateProfile>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
 export interface UserConnection {
   pageInfo: PageInfo;
   edges: UserEdge[];
@@ -1320,6 +1620,65 @@ export interface PostPreviousValuesSubscription
   content: () => Promise<AsyncIterator<String>>;
 }
 
+export interface ProfileSubscriptionPayload {
+  mutation: MutationType;
+  node: Profile;
+  updatedFields: String[];
+  previousValues: ProfilePreviousValues;
+}
+
+export interface ProfileSubscriptionPayloadPromise
+  extends Promise<ProfileSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = ProfilePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = ProfilePreviousValuesPromise>() => T;
+}
+
+export interface ProfileSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<ProfileSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = ProfileSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = ProfilePreviousValuesSubscription>() => T;
+}
+
+export interface ProfilePreviousValues {
+  id: ID_Output;
+  isCompleted: Boolean;
+  accountName: String;
+  accountBalance: String;
+  monthlyBudget: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface ProfilePreviousValuesPromise
+  extends Promise<ProfilePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  isCompleted: () => Promise<Boolean>;
+  accountName: () => Promise<String>;
+  accountBalance: () => Promise<String>;
+  monthlyBudget: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface ProfilePreviousValuesSubscription
+  extends Promise<AsyncIterator<ProfilePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  isCompleted: () => Promise<AsyncIterator<Boolean>>;
+  accountName: () => Promise<AsyncIterator<String>>;
+  accountBalance: () => Promise<AsyncIterator<String>>;
+  monthlyBudget: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
 export interface UserSubscriptionPayload {
   mutation: MutationType;
   node: User;
@@ -1421,6 +1780,10 @@ export const models: Model[] = [
   {
     name: "Expense",
     embedded: false
+  },
+  {
+    name: "Profile",
+    embedded: false
   }
 ];
 
@@ -1431,6 +1794,6 @@ export const models: Model[] = [
 export const Prisma = makePrismaClientClass<ClientConstructor<Prisma>>({
   typeDefs,
   models,
-  endpoint: `https://auth-graphql-test-6141061cc3.herokuapp.com`
+  endpoint: `https://eu1.prisma.sh/public-glimmergoat-454/budgety-v4-server/dev`
 });
 export const prisma = new Prisma();

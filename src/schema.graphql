@@ -2,14 +2,25 @@ type Query {
   feed: [Post!]!
   drafts: [Post!]!
   post(id: ID!): Post
+  profile: Profile
   me: User
 }
 
 type Mutation {
   signup(email: String!, password: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
-  createExpense(type: String!, description: String!, date: String!, amount: Float!): Expense!
+  createExpense(
+    type: String!
+    description: String!
+    date: String!
+    amount: Float!
+  ): Expense!
   createDraft(title: String!, content: String!): Post!
+  createProfile(
+    accountName: String!
+    accountBalance: String!
+    monthlyBudget: String!
+  ): Profile!
   publish(id: ID!): Post!
   deletePost(id: ID!): Post!
 }
@@ -46,4 +57,12 @@ type Expense {
   date: String!
   amount: Float!
   createdBy: User!
+}
+
+type Profile {
+  id: ID!
+  isCompleted: Boolean!
+  accountName: String!
+  accountBalance: String!
+  monthlyBudget: String!
 }
