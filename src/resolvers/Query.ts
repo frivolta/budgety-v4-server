@@ -36,4 +36,9 @@ export const Query = {
     };
     return ctx.prisma.profiles({ where });
   },
+
+  profile(parent, args, ctx: Context) {
+    const id = getUserId(ctx);
+    return ctx.prisma.profile({ id });
+  },
 };
