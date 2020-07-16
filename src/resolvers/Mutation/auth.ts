@@ -1,16 +1,25 @@
-import * as bcrypt from 'bcryptjs';
-import * as jwt from 'jsonwebtoken';
-import { Context } from '../../utils';
-import {ERROR_MESSAGES} from '../../messages';
+import * as bcrypt from "bcryptjs";
+import * as jwt from "jsonwebtoken";
+import { Context } from "../../utils";
+import { ERROR_MESSAGES } from "../../messages";
 
 export const auth = {
   async signup(parent, args, ctx: Context) {
     const password = await bcrypt.hash(args.password, 10);
     const user = await ctx.prisma.createUser({ ...args, password });
-
+    const profile = await ctx.prisma.createProfile({
+      accountBalance: "0",
+      monthlyBudget: "0",
+      isCompleted: false,
+      accountName: "No Name",
+      createdBy: {
+        connect: { id: user.id },
+      },
+    });
     return {
       token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),
-      user
+      user,
+      profile,
     };
   },
 
@@ -27,7 +36,7 @@ export const auth = {
 
     return {
       token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),
-      user
+      user,
     };
-  }
+  },
 };

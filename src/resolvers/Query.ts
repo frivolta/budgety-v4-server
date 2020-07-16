@@ -26,6 +26,7 @@ export const Query = {
     const id = getUserId(ctx);
     return ctx.prisma.user({ id });
   },
+
   profile(parent, args, ctx: Context) {
     const id = getUserId(ctx);
     return ctx.prisma.profile({ id });
